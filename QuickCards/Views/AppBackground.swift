@@ -3,7 +3,7 @@ import SwiftUI
 
 struct AppBackground: View {
     var body: some View {
-        Color.white
+        VisualEffectBackground(material: .underWindowBackground)
             .overlay {
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
                     .stroke(liquidBorder, lineWidth: 1.15)
@@ -54,8 +54,8 @@ struct WindowChromeConfigurator: NSViewRepresentable {
     func updateNSView(_ view: NSView, context: Context) {
         DispatchQueue.main.async {
             guard let window = view.window else { return }
-            window.isOpaque = true
-            window.backgroundColor = .white
+            window.isOpaque = false
+            window.backgroundColor = .clear
             window.titlebarAppearsTransparent = true
 
             if isResizable {
