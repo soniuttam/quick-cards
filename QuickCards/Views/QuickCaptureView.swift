@@ -133,7 +133,7 @@ struct QuickCaptureView: View {
     }
 
     private var primaryButtonColor: Color {
-        colorScheme == .dark ? Color(red: 0.0, green: 0.64, blue: 1.0) : Color(red: 1.0, green: 0.22, blue: 0.36)
+        colorScheme == .dark ? Color(red: 0.0, green: 0.64, blue: 1.0) : Color(red: 1.0, green: 0.48, blue: 0.0)
     }
 }
 
