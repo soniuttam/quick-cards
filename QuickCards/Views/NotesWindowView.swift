@@ -20,8 +20,9 @@ struct NotesWindowView: View {
                 content
             }
             .padding(22)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
-        .frame(minWidth: 720, minHeight: 520)
+        .frame(minWidth: 720, maxWidth: .infinity, minHeight: 520, maxHeight: .infinity)
     }
 
     private var header: some View {
@@ -74,6 +75,7 @@ struct NotesWindowView: View {
                 }
                 .padding(.vertical, 2)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
     }
 }

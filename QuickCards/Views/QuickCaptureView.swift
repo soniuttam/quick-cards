@@ -3,7 +3,6 @@ import WidgetKit
 
 struct QuickCaptureView: View {
     @Environment(\.openWindow) private var openWindow
-    @Environment(\.colorScheme) private var colorScheme
 
     let store: NoteStore
     let stopwatch: StopwatchStore
@@ -11,8 +10,6 @@ struct QuickCaptureView: View {
 
     private let minPopupWidth = 360.0
     private let minPopupHeight = 460.0
-    private let maxPopupWidth = 760.0
-    private let maxPopupHeight = 920.0
 
     var body: some View {
         ZStack {
@@ -32,10 +29,10 @@ struct QuickCaptureView: View {
         .frame(
             minWidth: minPopupWidth,
             idealWidth: 410,
-            maxWidth: maxPopupWidth,
+            maxWidth: .infinity,
             minHeight: minPopupHeight,
             idealHeight: 560,
-            maxHeight: maxPopupHeight
+            maxHeight: .infinity
         )
     }
 
@@ -126,11 +123,11 @@ struct QuickCaptureView: View {
     }
 
     private var primaryButtonTint: Color {
-        primaryButtonColor.opacity(colorScheme == .dark ? 0.48 : 0.44)
+        primaryButtonColor.opacity(0.48)
     }
 
     private var primaryButtonWash: Color {
-        primaryButtonColor.opacity(colorScheme == .dark ? 0.82 : 0.86)
+        primaryButtonColor.opacity(0.86)
     }
 
     private var primaryButtonForeground: Color {
@@ -138,7 +135,7 @@ struct QuickCaptureView: View {
     }
 
     private var primaryButtonColor: Color {
-        colorScheme == .dark ? Color(red: 0.0, green: 0.64, blue: 1.0) : Color(red: 1.0, green: 0.48, blue: 0.0)
+        Color(red: 1.0, green: 0.365, blue: 0.345)
     }
 }
 
