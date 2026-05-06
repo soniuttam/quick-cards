@@ -9,17 +9,20 @@ struct QuickCardsApp: App {
     var body: some Scene {
         Window("Quick Cards", id: AppConstants.notesWindowID) {
             NotesWindowView(store: store, stopwatch: stopwatch)
+                .preferredColorScheme(.light)
         }
         .defaultSize(width: 900, height: 640)
 
         WindowGroup("Quick Note", id: AppConstants.quickCaptureWindowID) {
             QuickCaptureView(store: store, stopwatch: stopwatch)
+                .preferredColorScheme(.light)
         }
         .handlesExternalEvents(matching: [AppConstants.quickCaptureWindowID])
         .defaultSize(width: 410, height: 600)
 
         MenuBarExtra {
             QuickCaptureView(store: store, stopwatch: stopwatch)
+                .preferredColorScheme(.light)
         } label: {
             HStack(spacing: 4) {
                 Image(systemName: stopwatch.isRunning ? "timer" : "checklist")

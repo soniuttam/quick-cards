@@ -2,10 +2,8 @@ import AppKit
 import SwiftUI
 
 struct AppBackground: View {
-    @Environment(\.colorScheme) private var colorScheme
-
     var body: some View {
-        VisualEffectBackground(material: colorScheme == .dark ? .hudWindow : .popover)
+        VisualEffectBackground(material: .popover)
             .overlay(WindowChromeConfigurator().frame(width: 0, height: 0))
             .ignoresSafeArea()
     }
@@ -52,7 +50,6 @@ struct WindowChromeConfigurator: NSViewRepresentable {
 }
 
 struct SoftPanel<Content: View>: View {
-    @Environment(\.colorScheme) private var colorScheme
     private let content: Content
 
     init(@ViewBuilder content: () -> Content) {
@@ -67,23 +64,23 @@ struct SoftPanel<Content: View>: View {
                     .stroke(reflectiveBorder, lineWidth: 1)
             }
             .shadow(
-                color: Color.black.opacity(colorScheme == .dark ? 0.18 : 0.05),
+                color: Color.black.opacity(0.05),
                 radius: 12,
                 y: 7
             )
     }
 
     private var glassTint: Color {
-        colorScheme == .dark ? .white.opacity(0.035) : .white.opacity(0.08)
+        .white.opacity(0.08)
     }
 
     private var reflectiveBorder: LinearGradient {
         LinearGradient(
             colors: [
-                .white.opacity(colorScheme == .dark ? 0.36 : 0.72),
+                .white.opacity(0.72),
                 .white.opacity(0.08),
-                .black.opacity(colorScheme == .dark ? 0.18 : 0.06),
-                .white.opacity(colorScheme == .dark ? 0.24 : 0.52)
+                .black.opacity(0.06),
+                .white.opacity(0.52)
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -183,15 +180,15 @@ struct RichNoteEditor: View {
             ZStack(alignment: .topLeading) {
                 TextEditor(text: $text, selection: $selection)
                     .font(.system(size: 15, design: .rounded))
-                    .foregroundStyle(.white)
-                    .tint(.white)
+                    .foregroundStyle(.black)
+                    .tint(.black)
                     .scrollContentBackground(.hidden)
                     .padding(8)
 
                 if text.plainText.isEmpty, !placeholder.isEmpty {
                     Text(placeholder)
                         .font(.system(size: 15, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.54))
+                        .foregroundStyle(.black.opacity(0.54))
                         .padding(.horizontal, 13)
                         .padding(.vertical, 17)
                         .allowsHitTesting(false)
