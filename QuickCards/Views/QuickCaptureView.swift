@@ -121,15 +121,19 @@ struct QuickCaptureView: View {
     }
 
     private var primaryButtonTint: Color {
-        colorScheme == .dark ? .white.opacity(0.10) : .accentColor.opacity(0.44)
+        primaryButtonColor.opacity(colorScheme == .dark ? 0.48 : 0.44)
     }
 
     private var primaryButtonWash: Color {
-        colorScheme == .dark ? .black.opacity(0.10) : .accentColor.opacity(0.76)
+        primaryButtonColor.opacity(colorScheme == .dark ? 0.82 : 0.86)
     }
 
     private var primaryButtonForeground: Color {
-        colorScheme == .dark ? .primary : .white
+        .white
+    }
+
+    private var primaryButtonColor: Color {
+        colorScheme == .dark ? Color(red: 0.0, green: 0.64, blue: 1.0) : Color(red: 1.0, green: 0.22, blue: 0.36)
     }
 }
 
