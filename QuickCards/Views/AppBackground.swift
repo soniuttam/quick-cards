@@ -3,9 +3,31 @@ import SwiftUI
 
 struct AppBackground: View {
     var body: some View {
-        VisualEffectBackground(material: .popover)
+        VisualEffectBackground(material: .underWindowBackground)
+            .overlay {
+                Rectangle()
+                    .fill(.white.opacity(0.08))
+            }
+            .overlay {
+                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    .stroke(liquidBorder, lineWidth: 1.15)
+                    .padding(0.5)
+            }
             .overlay(WindowChromeConfigurator().frame(width: 0, height: 0))
             .ignoresSafeArea()
+    }
+
+    private var liquidBorder: LinearGradient {
+        LinearGradient(
+            colors: [
+                .white.opacity(0.82),
+                .white.opacity(0.18),
+                .black.opacity(0.10),
+                .white.opacity(0.64)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
     }
 }
 
