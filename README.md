@@ -13,3 +13,7 @@ xcodebuild -project QuickCards.xcodeproj -scheme QuickCards -destination 'platfo
 ```sh
 xcodebuild -project QuickCards.xcodeproj -scheme QuickCards -destination 'platform=macOS' test
 ```
+
+## Download Page
+
+The static one-page download site lives in `docs/` and is ready for GitHub Pages.
