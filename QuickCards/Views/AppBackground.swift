@@ -5,10 +5,6 @@ struct AppBackground: View {
     var body: some View {
         VisualEffectBackground(material: .underWindowBackground)
             .overlay {
-                Rectangle()
-                    .fill(.white.opacity(0.08))
-            }
-            .overlay {
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
                     .stroke(liquidBorder, lineWidth: 1.15)
                     .padding(0.5)
@@ -80,7 +76,7 @@ struct SoftPanel<Content: View>: View {
 
     var body: some View {
         content
-            .glassEffect(.regular.tint(glassTint), in: .rect(cornerRadius: 18))
+            .glassEffect(.regular, in: .rect(cornerRadius: 18))
             .overlay {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .stroke(reflectiveBorder, lineWidth: 1)
@@ -90,10 +86,6 @@ struct SoftPanel<Content: View>: View {
                 radius: 12,
                 y: 7
             )
-    }
-
-    private var glassTint: Color {
-        .white.opacity(0.08)
     }
 
     private var reflectiveBorder: LinearGradient {
