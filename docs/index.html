@@ -7,7 +7,7 @@
   <meta name="description" content="Download Quick Cards, a minimal macOS menu bar notes app.">
   <meta property="og:title" content="Quick Cards">
   <meta property="og:description" content="A minimal macOS menu bar notes app for quick card-style notes.">
-  <meta property="og:image" content="assets/quick-cards-icon.png">
+  <meta property="og:image" content="assets/product-screenshot.png">
   <title>Quick Cards</title>
   <link rel="icon" href="assets/quick-cards-icon.png">
   <style>
@@ -62,7 +62,7 @@
 
     .shell {
       width: 100%;
-      max-width: min(560px, calc(100vw - 64px));
+      max-width: min(940px, calc(100vw - 64px));
       min-width: 0;
       display: grid;
       gap: 28px;
@@ -106,6 +106,22 @@
       justify-content: center;
       gap: 10px;
       margin-top: 2px;
+    }
+
+    .preview {
+      width: 100%;
+      max-width: 860px;
+      margin: 0;
+      padding: 0;
+      border-radius: 28px;
+    }
+
+    .preview img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: inherit;
+      box-shadow: var(--shadow);
     }
 
     a {
@@ -222,6 +238,11 @@
         max-width: 342px;
       }
 
+      .preview {
+        width: min(100%, calc(100vw - 48px));
+        border-radius: 20px;
+      }
+
       .steps {
         width: min(100%, calc(100vw - 48px));
         max-width: 342px;
@@ -244,6 +265,10 @@
           View GitHub
         </a>
       </div>
+
+      <figure class="preview">
+        <img src="assets/product-screenshot.png" alt="Quick Cards product screenshot showing the menu bar popup and expanded cards window.">
+      </figure>
 
       <div class="steps" aria-label="Install steps">
         <div class="step"><span class="number">1</span><span>Open the downloaded DMG.</span></div>
