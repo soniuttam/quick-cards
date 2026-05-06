@@ -7,11 +7,6 @@ struct AppBackground: View {
     var body: some View {
         VisualEffectBackground(material: backgroundMaterial)
             .overlay(adaptiveWash)
-            .overlay {
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .stroke(liquidBorder, lineWidth: 1.15)
-                    .padding(0.5)
-            }
             .overlay(WindowChromeConfigurator().frame(width: 0, height: 0))
             .ignoresSafeArea()
     }
@@ -22,18 +17,6 @@ struct AppBackground: View {
 
     private var backgroundMaterial: NSVisualEffectView.Material {
         colorScheme == .dark ? .hudWindow : .popover
-    }
-
-    private var liquidBorder: LinearGradient {
-        let highlight = colorScheme == .dark ? Color.white.opacity(0.34) : Color.white.opacity(0.86)
-        let mid = colorScheme == .dark ? Color.white.opacity(0.08) : Color.white.opacity(0.26)
-        let shadow = colorScheme == .dark ? Color.black.opacity(0.38) : Color.black.opacity(0.10)
-
-        return LinearGradient(
-            colors: [highlight, mid, shadow, highlight.opacity(0.78)],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
     }
 }
 
@@ -217,6 +200,10 @@ struct RichNoteEditor: View {
                     .tint(colorScheme == .dark ? .white : .black)
                     .scrollContentBackground(.hidden)
                     .padding(8)
+                    .overlay {
+                        TextEditorAppearanceConfigurator(colorScheme: colorScheme)
+                            .frame(width: 0, height: 0)
+                    }
 
                 if text.plainText.isEmpty, !placeholder.isEmpty {
                     Text(placeholder)
@@ -275,6 +262,57 @@ struct RichNoteEditor: View {
     private func copyToClipboard() {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(text.plainText, forType: .string)
+    }
+}
+
+private struct TextEditorAppearanceConfigurator: NSViewRepresentable {
+    let colorScheme: ColorScheme
+
+    func makeNSView(context: Context) -> NSView {
+        NSView()
+    }
+
+    func updateNSView(_ view: NSView, context: Context) {
+        DispatchQueue.main.async {
+            guard let textView = view.searchNearbyTextView() else { return }
+            let color = colorScheme == .dark ? NSColor.white : NSColor.black
+
+            textView.textColor = color
+            textView.insertionPointColor = color
+            textView.typingAttributes[.foregroundColor] = color
+
+            if let storage = textView.textStorage, storage.length > 0 {
+                storage.addAttribute(.foregroundColor, value: color, range: NSRange(location: 0, length: storage.length))
+            }
+        }
+    }
+}
+
+private extension NSView {
+    func searchNearbyTextView() -> NSTextView? {
+        var current: NSView? = self
+        while let view = current {
+            if let textView = view.firstTextViewInTree() {
+                return textView
+            }
+            current = view.superview
+        }
+
+        return nil
+    }
+
+    func firstTextViewInTree() -> NSTextView? {
+        if let textView = self as? NSTextView {
+            return textView
+        }
+
+        for subview in subviews {
+            if let textView = subview.firstTextViewInTree() {
+                return textView
+            }
+        }
+
+        return nil
     }
 }
 
