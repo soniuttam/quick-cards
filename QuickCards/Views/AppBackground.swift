@@ -39,9 +39,16 @@ struct VisualEffectBackground: NSViewRepresentable {
 
 struct WindowChromeConfigurator: NSViewRepresentable {
     var isResizable = false
+    var autosaveName: String?
+    var minSize = NSSize(width: 360, height: 460)
+    var maxSize = NSSize(width: 760, height: 920)
 
     func makeNSView(context: Context) -> NSView {
         NSView()
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
     }
 
     func updateNSView(_ view: NSView, context: Context) {
@@ -54,9 +61,66 @@ struct WindowChromeConfigurator: NSViewRepresentable {
 
             if isResizable {
                 window.styleMask.insert(.resizable)
-                window.minSize = NSSize(width: 360, height: 460)
-                window.maxSize = NSSize(width: 760, height: 920)
+                window.minSize = minSize
+                window.maxSize = maxSize
+                window.contentMinSize = minSize
+                window.contentMaxSize = maxSize
+
+                context.coordinator.configure(window: window, autosaveName: autosaveName, minSize: minSize, maxSize: maxSize)
             }
+        }
+    }
+
+    final class Coordinator: NSObject, NSWindowDelegate {
+        private weak var configuredWindow: NSWindow?
+        private var autosaveName: String?
+        private var didRestoreSize = false
+
+        func configure(window: NSWindow, autosaveName: String?, minSize: NSSize, maxSize: NSSize) {
+            if configuredWindow !== window {
+                configuredWindow = window
+                didRestoreSize = false
+            }
+
+            self.autosaveName = autosaveName
+            window.delegate = self
+
+            guard !didRestoreSize, let autosaveName else { return }
+            didRestoreSize = true
+
+            let savedSize = Self.savedSize(for: autosaveName, minSize: minSize, maxSize: maxSize)
+            guard savedSize != .zero, savedSize != window.frame.size else { return }
+
+            var frame = window.frame
+            frame.origin.x = frame.maxX - savedSize.width
+            frame.origin.y = frame.maxY - savedSize.height
+            frame.size = savedSize
+            window.setFrame(frame, display: true)
+        }
+
+        func windowDidResize(_ notification: Notification) {
+            saveSize(from: notification)
+        }
+
+        func windowDidEndLiveResize(_ notification: Notification) {
+            saveSize(from: notification)
+        }
+
+        private func saveSize(from notification: Notification) {
+            guard let autosaveName, let window = notification.object as? NSWindow else { return }
+            let size = window.frame.size
+            UserDefaults.standard.set([size.width, size.height], forKey: autosaveName)
+        }
+
+        private static func savedSize(for key: String, minSize: NSSize, maxSize: NSSize) -> NSSize {
+            guard let values = UserDefaults.standard.array(forKey: key) as? [Double], values.count == 2 else {
+                return .zero
+            }
+
+            return NSSize(
+                width: min(max(values[0], minSize.width), maxSize.width),
+                height: min(max(values[1], minSize.height), maxSize.height)
+            )
         }
     }
 }

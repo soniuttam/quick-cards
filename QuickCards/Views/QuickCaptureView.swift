@@ -25,7 +25,10 @@ struct QuickCaptureView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .overlay(WindowChromeConfigurator(isResizable: true).frame(width: 0, height: 0))
+        .overlay(
+            WindowChromeConfigurator(isResizable: true, autosaveName: AppConstants.quickCapturePopupSizeKey)
+                .frame(width: 0, height: 0)
+        )
         .frame(
             minWidth: minPopupWidth,
             idealWidth: 410,
