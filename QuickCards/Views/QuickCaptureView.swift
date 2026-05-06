@@ -78,7 +78,12 @@ struct QuickCaptureView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
         }
-        .buttonStyle(.glassProminent)
+        .buttonStyle(.plain)
+        .foregroundStyle(.primary)
+        .overlay {
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(.white.opacity(0.45), lineWidth: 1)
+        }
         .disabled(draft.plainText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         .opacity(draft.plainText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.45 : 1)
         .keyboardShortcut(.return, modifiers: [.command])

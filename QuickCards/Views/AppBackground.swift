@@ -76,16 +76,10 @@ struct SoftPanel<Content: View>: View {
 
     var body: some View {
         content
-            .glassEffect(.regular, in: .rect(cornerRadius: 18))
             .overlay {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .stroke(reflectiveBorder, lineWidth: 1)
             }
-            .shadow(
-                color: Color.black.opacity(0.05),
-                radius: 12,
-                y: 7
-            )
     }
 
     private var reflectiveBorder: LinearGradient {
