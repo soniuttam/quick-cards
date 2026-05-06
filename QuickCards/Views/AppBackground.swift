@@ -6,6 +6,7 @@ struct AppBackground: View {
 
     var body: some View {
         VisualEffectBackground(material: backgroundMaterial)
+            .overlay(adaptiveWash)
             .overlay {
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
                     .stroke(liquidBorder, lineWidth: 1.15)
@@ -13,6 +14,10 @@ struct AppBackground: View {
             }
             .overlay(WindowChromeConfigurator().frame(width: 0, height: 0))
             .ignoresSafeArea()
+    }
+
+    private var adaptiveWash: Color {
+        colorScheme == .dark ? .black.opacity(0.10) : .white.opacity(0.10)
     }
 
     private var backgroundMaterial: NSVisualEffectView.Material {
@@ -84,6 +89,7 @@ struct SoftPanel<Content: View>: View {
 
     var body: some View {
         content
+            .background(panelWash, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
             .glassEffect(.regular, in: .rect(cornerRadius: 18))
             .overlay {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
@@ -106,6 +112,10 @@ struct SoftPanel<Content: View>: View {
 
     private var shadowColor: Color {
         colorScheme == .dark ? .black.opacity(0.22) : .black.opacity(0.07)
+    }
+
+    private var panelWash: Color {
+        colorScheme == .dark ? .black.opacity(0.10) : .white.opacity(0.10)
     }
 }
 
