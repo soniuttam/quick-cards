@@ -25,7 +25,9 @@ struct QuickCaptureView: View {
                 recentNotes
             }
             .padding(16)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .overlay(WindowChromeConfigurator(isResizable: true).frame(width: 0, height: 0))
         .frame(
             minWidth: minPopupWidth,
@@ -110,8 +112,11 @@ struct QuickCaptureView: View {
                     .padding(.vertical, 2)
                 }
                 .scrollIndicators(.hidden)
+                .frame(maxHeight: .infinity)
             }
         }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .layoutPriority(1)
     }
 
     private func reloadControlsIfAvailable() {
