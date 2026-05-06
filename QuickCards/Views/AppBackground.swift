@@ -2,8 +2,10 @@ import AppKit
 import SwiftUI
 
 struct AppBackground: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
-        VisualEffectBackground(material: .underWindowBackground)
+        VisualEffectBackground(material: backgroundMaterial)
             .overlay {
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
                     .stroke(liquidBorder, lineWidth: 1.15)
@@ -13,14 +15,17 @@ struct AppBackground: View {
             .ignoresSafeArea()
     }
 
+    private var backgroundMaterial: NSVisualEffectView.Material {
+        colorScheme == .dark ? .hudWindow : .popover
+    }
+
     private var liquidBorder: LinearGradient {
-        LinearGradient(
-            colors: [
-                .white.opacity(0.82),
-                .white.opacity(0.18),
-                .black.opacity(0.10),
-                .white.opacity(0.64)
-            ],
+        let highlight = colorScheme == .dark ? Color.white.opacity(0.34) : Color.white.opacity(0.86)
+        let mid = colorScheme == .dark ? Color.white.opacity(0.08) : Color.white.opacity(0.26)
+        let shadow = colorScheme == .dark ? Color.black.opacity(0.38) : Color.black.opacity(0.10)
+
+        return LinearGradient(
+            colors: [highlight, mid, shadow, highlight.opacity(0.78)],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
@@ -57,6 +62,7 @@ struct WindowChromeConfigurator: NSViewRepresentable {
             window.isOpaque = false
             window.backgroundColor = .clear
             window.titlebarAppearsTransparent = true
+            window.appearance = nil
 
             if isResizable {
                 window.styleMask.insert(.resizable)
@@ -68,6 +74,8 @@ struct WindowChromeConfigurator: NSViewRepresentable {
 }
 
 struct SoftPanel<Content: View>: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     private let content: Content
 
     init(@ViewBuilder content: () -> Content) {
@@ -76,23 +84,28 @@ struct SoftPanel<Content: View>: View {
 
     var body: some View {
         content
+            .glassEffect(.regular, in: .rect(cornerRadius: 18))
             .overlay {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .stroke(reflectiveBorder, lineWidth: 1)
             }
+            .shadow(color: shadowColor, radius: colorScheme == .dark ? 14 : 18, x: 0, y: 10)
     }
 
     private var reflectiveBorder: LinearGradient {
-        LinearGradient(
-            colors: [
-                .white.opacity(0.72),
-                .white.opacity(0.08),
-                .black.opacity(0.06),
-                .white.opacity(0.52)
-            ],
+        let highlight = colorScheme == .dark ? Color.white.opacity(0.28) : Color.white.opacity(0.78)
+        let mid = colorScheme == .dark ? Color.white.opacity(0.06) : Color.white.opacity(0.18)
+        let shadow = colorScheme == .dark ? Color.black.opacity(0.34) : Color.black.opacity(0.08)
+
+        return LinearGradient(
+            colors: [highlight, mid, shadow, highlight.opacity(0.72)],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
+    }
+
+    private var shadowColor: Color {
+        colorScheme == .dark ? .black.opacity(0.22) : .black.opacity(0.07)
     }
 }
 
@@ -154,6 +167,8 @@ struct StopwatchHeaderControls: View {
 }
 
 struct RichNoteEditor: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     @Binding var text: AttributedString
     let placeholder: String
 
@@ -188,15 +203,15 @@ struct RichNoteEditor: View {
             ZStack(alignment: .topLeading) {
                 TextEditor(text: $text, selection: $selection)
                     .font(.system(size: 15, design: .rounded))
-                    .foregroundStyle(.black)
-                    .tint(.black)
+                    .foregroundStyle(.primary)
+                    .tint(colorScheme == .dark ? .white : .black)
                     .scrollContentBackground(.hidden)
                     .padding(8)
 
                 if text.plainText.isEmpty, !placeholder.isEmpty {
                     Text(placeholder)
                         .font(.system(size: 15, design: .rounded))
-                        .foregroundStyle(.black.opacity(0.54))
+                        .foregroundStyle(.secondary)
                         .padding(.horizontal, 13)
                         .padding(.vertical, 17)
                         .allowsHitTesting(false)
