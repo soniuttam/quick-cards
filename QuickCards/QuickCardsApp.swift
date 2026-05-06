@@ -1,7 +1,10 @@
+import ServiceManagement
 import SwiftUI
 
 @main
 struct QuickCardsApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+
     @State private var store = NoteStore()
     @State private var stopwatch = StopwatchStore()
     @Environment(\.openWindow) private var openWindow
@@ -47,6 +50,23 @@ struct QuickCardsApp: App {
                 }
                 .keyboardShortcut("0", modifiers: [.command])
             }
+        }
+    }
+}
+
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
+        registerForLoginLaunch()
+    }
+
+    private func registerForLoginLaunch() {
+        do {
+            if SMAppService.mainApp.status == .notRegistered {
+                try SMAppService.mainApp.register()
+            }
+        } catch {
+            NSLog("Quick Cards could not register as a login item: \(error.localizedDescription)")
         }
     }
 }
