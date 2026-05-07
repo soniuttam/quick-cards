@@ -318,8 +318,14 @@
       </div>
 
       <div class="notice">
+        <strong>If macOS says the DMG is damaged</strong>
+        Quick Cards is currently unsigned and local-only. If the downloaded DMG will not open, run this once in Terminal, then open it again:
+        <code>xattr -dr com.apple.quarantine ~/Downloads/Quick-Cards-macOS*.dmg</code>
+      </div>
+
+      <div class="notice">
         <strong>If macOS says the app is damaged</strong>
-        Quick Cards is currently unsigned and local-only. After dragging it into Applications, run this once in Terminal:
+        After dragging Quick Cards into Applications, run this once in Terminal:
         <code>xattr -dr com.apple.quarantine "/Applications/Quick Cards.app"</code>
       </div>
 
